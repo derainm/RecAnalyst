@@ -5,7 +5,8 @@
 [![Build Status](https://travis-ci.org/goto-bus-stop/recanalyst.svg?branch=master)](https://travis-ci.org/goto-bus-stop/recanalyst)
 [![Gitter chat](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst)
 
-**UNDER DEVELOPMENT after more than 8 year so we will use it  :)**
+**UNDER DEVELOPMENT after more than 8 years so we will use it  :)**
+
 original source code https://github.com/lichifeng/RecAnalyst2
 RecAnalyst2 is a PHP package for analyzing Age of Empires II recorded games.
 RecAnalyst2 is derived from 
@@ -29,7 +30,7 @@ And reads data such as:
  * Achievements (UserPatch only)
  * Tributes
 
-A small demo application is hosted at http://idlebeaver.ninja/recanalyst.
+A small demo application is hosted at http://www.aoe2recanalyst.byethost16.com/.
 
 [License][] - [Credits][] - [Contributing][] - [Requirements][] -
 [Installation][] - [Configuration][] - [Usage Examples][] -
