@@ -7,8 +7,8 @@
 
 **UNDER DEVELOPMENT after more than 8 years so we will use it  :)**
 
-original source code https://github.com/lichifeng/RecAnalyst2
-RecAnalyst2 is a PHP package for analyzing Age of Empires II recorded games.
+original source code  [https://github.com/lichifeng/RecAnalyst2](https://github.com/lichifeng/RecAnalyst2)<br>
+RecAnalyst2 is a PHP package for analyzing Age of Empires II recorded games.<br>
 RecAnalyst2 is derived from 
 
 It supports recorded game files from: [RecAnlyst](https://github.com/goto-bus-stop/recanalyst)
