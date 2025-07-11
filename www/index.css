@@ -1,0 +1,133 @@
+      .Page {
+            width: 800px; 
+        }
+
+        .Category {
+            max-height: 900px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .General {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .Teams {
+            display: flex;
+        }
+        .Team {
+            margin: 80px;
+        }
+
+        .Advancing-player {
+            width: 200px;
+            padding: 10px;
+        }
+
+        .Player-name {
+            text-align: center;
+            font-weight: bold;
+        }
+        .Player-civ {
+            float: center;
+             text-align: center;
+            font-size: smaller;
+        }
+        .small {
+            font-size: 0.75rem;
+             text-align: center;
+        }
+        .playercivname {
+            float: left;
+            margin-left: 5px;
+            text-align: left;
+        }
+        .ResearchesLine {
+        }
+        .ResearchesLine-player {
+            float: left;
+            width: 200px;
+        }
+
+        .Research {
+            float: left;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .Research-time {
+            color: #444;
+        }
+
+        .u-playerColor {
+            /* To make colours a bit more bearable: put a 50% opaque white layer on top of them. */
+            background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+        }
+        .outlined-text {
+          text-shadow:
+            -1px -1px 0 black,
+            1px -1px 0 black,
+            -1px 1px 0 black,
+            1px 1px 0 black;
+        }
+        .chat { 
+            font-size: 16px;
+        }
+        .Player-img{
+            width: 45px;
+            height: 45px;
+            /*
+            border: 2px solid blue;
+            margin-bottom: 15px;
+            */
+        }
+        .Research-img
+        {
+            width: 40px;
+            height: 40px; 
+        }
+        .centered-image {
+            display: block; /* Important: images are inline by default */
+            margin: 0 auto; /* Sets top/bottom margin to 0, and left/right margin to auto */
+            max-width: 100%; /* Good practice for responsiveness */
+            height: auto; /* Good practice for responsiveness */
+        }
+        .NextAge-img{
+            width: 25px;
+            height: 25px;
+            border: 1px solid transparent;
+            /*
+            margin-bottom: 15px;
+            */
+        }
+        .Tab-img{
+            width: 40px;
+            height: 40px; 
+            border: 1px solid transparent;
+            /*
+            margin-bottom: 15px;
+            */
+        }
+
+        .tab-cont
+        {
+            width: 800px; 
+            display: flex;
+        }
+
+        .tab-text { 
+            text-align: center; 
+        } 
+        /* Class for highlighting the max value */
+        .highlight-max {
+            background-color: #d4edda; /* Light green */
+            font-weight: bold;
+            color: #155724; /* Dark green */
+        } 
+        tr:nth-child(even){background-color: #f2f2f2}
+        th {
+          background-color: #F5F5F5;
+display: grid; /* Make the <th> a grid container */
+  place-items: center; 
+          
+        }
