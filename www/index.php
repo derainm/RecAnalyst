@@ -19,6 +19,7 @@ use RecAnalyst\RecordedGame;
 use RecAnalyst\Utils;
 use Intervention\Image\ImageManagerStatic;
 use RecAnalyst\Analyzers\PostgameDataAnalyzer;
+use RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization;
 
 use RecAnalyst\Model\Version;
 
@@ -45,7 +46,7 @@ function getCurrentUrl() {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'];
     $uri = $_SERVER['REQUEST_URI'];
-    return $protocol . "://" . $host . $uri;
+    return $protocol . "://" . $host ;//. $uri
 }
 
  
@@ -76,12 +77,28 @@ function getCurrentUrl() {
 
         $p =   getCurrentUrl().'/resources/images/Civs_Emblems/'. strtolower($player->civName()).'.png';
      
-        echo $p;
+        //echo $p;
+        /*
           if (is_file($p)) {
                 // Turn the image into a data URL.
                 return  $p ;//ImageManagerStatic::make($p)->encode('data-url');
               }
-            return '';
+              */
+            return $p;
+    }
+    function getCivImageByName($Name)
+    {                       
+
+        $p =   getCurrentUrl().'/resources/images/Civs_Emblems/'. $Name.'.png';
+     
+       // echo $p;
+        /*
+          if (is_file($p)) {
+                // Turn the image into a data URL.
+                return  $p ;//ImageManagerStatic::make($p)->encode('data-url');
+              }
+              */
+            return $p ;
     }
  
     function getUnitImage($id)
@@ -121,6 +138,9 @@ function getCurrentUrl() {
 
 $rec = new RecordedGame($filename);
  
+ //$messages = $rec->runAnalyzer(new BodyAnalyzer)->chatMessages;
+ 
+
 
 // In a real app, it's better to save the image using the ->save() method, and
 // link to the stored image in your HTML page. For this example, we'll just
@@ -224,17 +244,18 @@ $mapImage = $rec->mapImage()
                     <?php } ?>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane Category" id="achievements">
+            <div role="tabpanel" class="tab-pane Category " id="achievements">
                 <div class="Achievements">
+                    <strong>Team </strong>
                     <?php if ($rec->achievements()) { ?>
                         <?php foreach ($rec->players() as $player) { ?>
                             <strong><?= e($player->name) ?></strong>
-                            <?= json_encode($player->achievements()) ?>
+                            <?=  json_encode($player->achievements()) ?>
                         <?php } ?>
                     <?php } ?>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane Category" id="advancing">
+            <div role="tabpanel" class="tab-pane Category hide-overflow" id="advancing">
                 <div class="Advancing Teams">
                     <?php foreach ($rec->teams() as $team) { ?>
                         <div class="Advancing-team Team">
@@ -243,7 +264,7 @@ $mapImage = $rec->mapImage()
                                 <div class="Advancing-player Player u-playerColor"
                                     style="background-color: <?= $player->color() ?>">
                                      <img class="Player-img centered-image"   src="<?= getCivImage($player) ?>">
-                                    <p class="Player-name">
+                                    <p class="Player-name  ChatMessage clearfix chat outlined-text"  style="color:<?=Utils::lightenHexColor( $player->color(),0.475)?>" >
                                         <?= e($player->name) ?> <!--<small>(<?= e($player->civName()) ?>)</small>-->
                                     </p>
                                     <ol class="list-unstyled">
@@ -260,10 +281,33 @@ $mapImage = $rec->mapImage()
  
             <div role="tabpanel" class="tab-pane Category" id="chat" >
                 <div class="Chat">
+                     <div class="Chat-pregame">
+                        <h3>Pregame</h3>
+                        <?php
+                            foreach ($rec->header()->pregameChat as $chat) {
+                                    //printf("  %s %s\n",  $chat[1],  $chat[2]);
+                                    $color = 0;   
+                                    foreach($rec->players() as $player)
+                                    {
+                                        if(strstr($chat[1],$player->name ))//$player->name == $chat[1])
+                                        {
+                                            $color = $player->color();
+                                        }
+                                    } 
+                                        echo "<div class=\"ChatMessage clearfix chat outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475)."\">";
+                                        echo "<span class=\"ChatMessage-sender\" >"; 
+                                            echo $chat[1];//str_replace('投降!','',$chat[1]);//$chat->player->name;
+                                        echo "</span>:".$chat[2];//$chat->msg; 
+                                    echo "</div>";
+                            }
+                        ?>
+                    </div>
                      <div class="Chat-ingame" > 
                         <h3>In-game</h3>
-                        <?php  
+                        <?php    
                             foreach ($rec->body()->chatMessages as $chat) {
+
+                                    //$m =$rec->body()->chatMessages->create($chat[0], $chat[1]); 
                                     $color = 0;   
                                     foreach($rec->players() as $player)
                                     {
@@ -275,7 +319,7 @@ $mapImage = $rec->mapImage()
                                     echo "<div class=\"ChatMessage clearfix chat outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475)."\">";//background-
                                         echo "<span class=\"ChatMessage-time\"> ";
                                             echo  $chat[0];//Utils::formatGameTime($chat->time); 
-                                        echo "</span>";
+                                        echo " </span>";
                                         echo "<span class=\"ChatMessage-sender\" >"; 
                                             echo $chat[1];//str_replace('投降!','',$chat[1]);//$chat->player->name;
                                         echo "</span>:".$chat[2];//$chat->msg; 
@@ -291,8 +335,8 @@ $mapImage = $rec->mapImage()
                     <?php foreach ($rec->players() as $player) { ?>
                         <div class="Researches-line clearfix ResearchesLine u-playerColor"
                             style="background-color: <?= $player->color() ?>">
-                            <div class="ResearchesLine-player">
-                                <?= e($player->name) ?>
+                            <div class="ResearchesLine-player ChatMessage clearfix chat outlined-text"  style="color:<?=Utils::lightenHexColor( $player->color(),0.475)?>"> 
+                            <img class="Player-Civ-research-img" src="<?= getCivImage($player) ?>"> <?= e(' '.$player->name) ?>
                             </div>
                             <div class="ResearchesLine-researches">
                                 <?php foreach ($player->researches() as $research) { ?>
@@ -328,6 +372,10 @@ $mapImage = $rec->mapImage()
                     { 
                         $PostgameDataAnalyzer =$rec->body()->postGameData;
                         $i=0;
+                        usort($PostgameDataAnalyzer->players , function($a, $b) {
+                            return strcmp($a->team, $b->team);
+                        });
+
                         foreach($PostgameDataAnalyzer->players as $player )
                         { 
                             //$res = $rec->getResourcePack(); 
@@ -339,18 +387,15 @@ $mapImage = $rec->mapImage()
                                 {
                                     $color = $p->color();
                                 }
-                            } 
-                            /*
-                            if($i%2==0)
-                            { 
-                                $col = #f2f4f7;
-                            }*/
+                            }  
                             echo "<tr>";
-                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">". $player->name ."</td>" ;
+                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">" 
+                            ."<img class=\"Player-Civ-Tab-img\" src=\"".getCivImageByName(strtolower(Civilization::$CIV_NAMES[$player->civId])) ."\"> "
+                            . $player->name ."</td>" ;
                             echo "  <td class =\"tab-text\">". number_format($player->militaryStats->score , 0, ',', ' ')    ."</td>" ;
                             echo "  <td class =\"tab-text\">". number_format($player->economyStats->score  , 0, ',', ' ')    ."</td>" ; 
                             echo "  <td class =\"tab-text\">". number_format($player->techStats->score     , 0, ',', ' ')    ."</td>" ; 
-                            echo "  <td class =\"tab-text\">". number_format($player->societyStats->score  , 0, ',', ' ')    ."</td>" ; 
+                            echo "  <td class =\"tab-text noMax\">". number_format($player->societyStats->score  , 0, ',', ' ')    ."</td>" ; 
                             $totalScore = 0;
                             $totalScore = $player->militaryStats->score + $player->economyStats->score + $player->techStats->score + $player->societyStats->score;
                             echo "  <td class =\"tab-text\">".number_format($totalScore, 0, ',', ' ')  ."</td>" ; 
@@ -391,11 +436,13 @@ $mapImage = $rec->mapImage()
                                 }
                             } 
                             echo "<tr>";
-                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">". $player->name ."</td>" ;
+                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">"
+                            ."<img class=\"Player-Civ-Tab-img\" src=\"".getCivImageByName(strtolower(Civilization::$CIV_NAMES[$player->civId])) ."\"> "
+                            . $player->name ."</td>" ;
                             echo "  <td class =\"tab-text\">". number_format($player->militaryStats->unitsKilled , 0, ',', ' ')    ."</td>" ;
                             echo "  <td class =\"tab-text minVal\">". number_format($player->militaryStats->unitsLost  , 0, ',', ' ')    ."</td>" ; 
                             echo "  <td class =\"tab-text\">". number_format($player->militaryStats->buildingsRazed     , 0, ',', ' ')    ."</td>" ; 
-                            echo "  <td class =\"tab-text minVal\">". number_format($player->militaryStats->buildingsLost  , 0, ',', ' ')    ."</td>" ;  
+                            echo "  <td class =\"tab-text noMax\">". number_format($player->militaryStats->buildingsLost  , 0, ',', ' ')    ."</td>" ;  
                             echo "  <td class =\"tab-text\">". number_format($player->militaryStats->unitsConverted, 0, ',', ' ')  ."</td>" ; 
                             echo "</tr>";
                         }
@@ -409,7 +456,7 @@ $mapImage = $rec->mapImage()
           <thead>
             <tr>
               <th scope="col">Economy Score</th>
-              <th scope="col"><img src="<?= getResImage('food') ?>"></th>
+              <th scope="col"><img class =  "img-cent" src="<?= getResImage('food') ?>"></th>
               <th scope="col"><img src="<?= getResImage('wood') ?>"></th>
               <th scope="col"><img src="<?= getResImage('stone') ?>"></th>
               <th scope="col"><img src="<?= getResImage('gold') ?>"></th>
@@ -436,7 +483,9 @@ $mapImage = $rec->mapImage()
                             } 
 
                             echo "<tr>";
-                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">". $player->name ."</td>" ;
+                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">"
+                            ."<img class=\"Player-Civ-Tab-img\" src=\"".getCivImageByName(strtolower(Civilization::$CIV_NAMES[$player->civId])) ."\"> "
+                            . $player->name ."</td>" ;
                             echo "  <td class =\"tab-text\">". number_format($player->economyStats->foodCollected , 0, ',', ' ')    ."</td>" ;
                             echo "  <td class =\"tab-text\">". number_format($player->economyStats->woodCollected  , 0, ',', ' ')    ."</td>" ; 
                             echo "  <td class =\"tab-text\">". number_format($player->economyStats->stoneCollected     , 0, ',', ' ')    ."</td>" ; 
@@ -483,7 +532,9 @@ $mapImage = $rec->mapImage()
                                 }
                             } 
                             echo "<tr>";
-                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">". $player->name ."</td>" ;
+                            echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">"
+                            ."<img class=\"Player-Civ-Tab-img\" src=\"".getCivImageByName(strtolower(Civilization::$CIV_NAMES[$player->civId])) ."\"> "
+                            . $player->name ."</td>" ;
                             echo "  <td class =\"tab-text minVal\">". Utils::formatGameTime($player->techStats->feudalTime,1)   ."</td>" ;
                             echo "  <td class =\"tab-text minVal\">". Utils::formatGameTime($player->techStats->castleTime,1)   ."</td>" ; 
                             echo "  <td class =\"tab-text minVal\">". Utils::formatGameTime($player->techStats->imperialTime,1)   ."</td>" ; 
@@ -526,9 +577,11 @@ $mapImage = $rec->mapImage()
                                     }
                                 }  
                                 echo "<tr>";
-                                echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">". $player->name ."</td>" ;
+                                echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">"
+                                ."<img class=\"Player-Civ-Tab-img\" src=\"".getCivImageByName(strtolower(Civilization::$CIV_NAMES[$player->civId])) ."\"> "
+                                . $player->name ."</td>" ;
                                 echo "  <td class =\"tab-text\">". $player->societyStats->totalWonders   ."</td>" ;
-                                echo "  <td class =\"tab-text\">". $player->societyStats->totalCastles   ."</td>" ; 
+                                echo "  <td class =\"tab-text noMax\">". $player->societyStats->totalCastles   ."</td>" ; 
                                 echo "  <td class =\"tab-text\">". $player->societyStats->relicsCaptured ."</td>" ; 
                                 echo "  <td class =\"tab-text\">". $player->economyStats->relicGold       ."</td>" ; 
                                 echo "  <td class =\"tab-text\">". $player->societyStats->villagerHigh   ."</td>" ;    
@@ -577,7 +630,7 @@ $mapImage = $rec->mapImage()
                                     $a_player = $p;
                                 }
                             } 
-                            //no work , the ressource is the stat
+                            //no work  
                             echo "<tr>";
                             echo "  <td class =\"outlined-text\" style=\"color:". Utils::lightenHexColor($color,0.475) ."\">". $player->name ."</td>" ;
                             echo "  <td class =\"tab-text\">". number_format($a_player->Resources[344] , 0, ',', ' ')    ."</td>" ;
