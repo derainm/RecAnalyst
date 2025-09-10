@@ -201,6 +201,7 @@ class PlayerObjectsListAnalyzer extends Analyzer
             }
 
             $this->unitId = $this->readHeader('v', 2);
+            //echo "id ".$this->unitId ." objectType ". $this->objectType  . "\n"."<br>"; 
             switch ($this->objectType) {
                 case self::UT_EYECANDY:
                     $this->readEyeCandy();
@@ -238,22 +239,24 @@ class PlayerObjectsListAnalyzer extends Analyzer
                     ) {
                         $this->position += strlen($this->objectsMidSeparatorGaia);
                     } else {
-                                                /*
+                                                
                          //echo "id ".$this->unitId ." objectType ". $this->objectType  . "\n"."<br>"; 
+                        //fix scenario bug
+                        if($this->unitId == 0)
+                        {
                             $this->position += strlen($this->playerInfoEndSeparator);
                             $this->readBuilding();
                             break; 
-                            $this->position += strlen($this->playerInfoEndSeparator);
-                            $this->readBuilding();
-                             break; 
-
-                             */    
-                         echo"Could not find GAIA object separator" ."<br> "    ;  
+                            //$this->position += strlen($this->playerInfoEndSeparator);
+                            //$this->readBuilding();
+                            //break; 
+                        }
+                        echo"Could not find GAIA object separator " .$this->unitId ."<br> "    ;   
                         throw new \Exception('Could not find GAIA object separator');
                     }
                     break;
                 default:
-                echo"Could not find GAIA object separator" ."<br> "    ;  
+               echo "Could not find GAIA object separator" ."<br> " ; 
                     throw new \Exception(sprintf('Unknown object type %d', $this->objectType));
             }
         }
